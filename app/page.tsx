@@ -37,7 +37,7 @@ export default function App() {
   return (
     <main>
       <h1>My todos</h1>
-      <button onClick={createTodo}>+ new things</button>
+      <button onClick={createTodo}>+ news</button>
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>{todo.content}</li>

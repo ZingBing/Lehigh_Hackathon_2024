@@ -1,5 +1,12 @@
 Study Buddy Finder
 
+Pages:
+Homepage
+log in page
+profile page
+settings
+
+
 TOP PRIORITY:
     GET WEB APP TO RUN - basics only
 

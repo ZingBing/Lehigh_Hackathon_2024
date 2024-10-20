@@ -63,3 +63,32 @@ body {
     font-weight: 800;
     text-decoration: none;
   }
+
+  .ai-study-buddy-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ai-study-buddy-box h1,
+  .ai-study-buddy-box h2 {
+    margin-top: 0;
+  }
+  
+  .ai-study-buddy-box input {
+    width: calc(100% - 60px);
+    padding: 10px;
+    margin-right: 10px;
+  }
+  
+  .ai-study-buddy-box button {
+    padding: 10px;
+  }
+  
+  .ai-study-buddy-box p {
+    white-space: pre-wrap;
+  }

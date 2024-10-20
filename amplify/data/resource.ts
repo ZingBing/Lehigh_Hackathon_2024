@@ -54,3 +54,38 @@ Fetch records from the database and use them in your frontend component.
 // const { data: todos } = await client.models.Todo.list()
 
 // return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
+
+import { defineSchema, Model } from '@aws-amplify/data';
+
+export const Profile: Model = {
+  name: 'Profile',
+  fields: {
+    id: { type: 'ID', required: true },
+    name: { type: 'String', required: true },
+    email: { type: 'String', required: true },
+  },
+};
+
+export const Class: Model = {
+  name: 'Class',
+  fields: {
+    id: { type: 'ID', required: true },
+    name: { type: 'String', required: true },
+  },
+};
+
+export const Hobby: Model = {
+  name: 'Hobby',
+  fields: {
+    id: { type: 'ID', required: true },
+    name: { type: 'String', required: true },
+  },
+};
+
+export const schema = defineSchema({
+  models: {
+    Profile,
+    Class,
+    Hobby,
+  },
+});

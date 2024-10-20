@@ -1,56 +1,61 @@
 "use client";
 
+import { useState } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { useState, useEffect } from "react";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-import "./../profile/profile.css";
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
+import "./../profile/profile.css";
 
-Amplify.configure(outputs);
+export default function Profile() {
+  const { signOut } = useAuthenticator();
+  const [profile, setProfile] = useState({
+    name: "John Doe",
+    email: "john.doe@example.com",
+  });
+  const [classes, setClasses] = useState<string[]>(["Math 101", "History 202"]);
+  const [hobbies, setHobbies] = useState<string[]>(["Reading", "Cycling"]);
 
-const client = generateClient<Schema>();
-
-export default function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-    
-
-  function listTodos() {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
+  function addClass() {
+    const className = window.prompt("Class name");
+    if (className) {
+      setClasses([...classes, className]);
+    }
   }
 
-  useEffect(() => {
-    listTodos();
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({
-      content: window.prompt("Todo content"),
-    });
+  function addHobby() {
+    const hobbyName = window.prompt("Hobby name");
+    if (hobbyName) {
+      setHobbies([...hobbies, hobbyName]);
+    }
   }
-
-    
 
   return (
     <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ news</button>
-      <ul>
-        {todos.map((todo) => (
-          <li 
-          key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 Second page successfully made. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/">
-          Review next steps of this tutorial.
-        </a>
+      <div className="settings-box">
+        <h1>My Profile</h1>
+        <div>
+          <h2>General Information</h2>
+          <p>Name: {profile.name}</p>
+          <p>Email: {profile.email}</p>
+        </div>
+        <div>
+          <h2>Current Classes</h2>
+          <button onClick={addClass}>+ Add Class</button>
+          <ul>
+            {classes.map((cls, index) => (
+              <li key={index}>{cls}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2>Hobbies</h2>
+          <button onClick={addHobby}>+ Add Hobby</button>
+          <ul>
+            {hobbies.map((hobby, index) => (
+              <li key={index}>{hobby}</li>
+            ))}
+          </ul>
+        </div>
+        <button onClick={signOut}>Sign out</button>
       </div>
     </main>
   );

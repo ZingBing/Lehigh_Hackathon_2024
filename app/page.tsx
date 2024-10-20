@@ -1,58 +1,55 @@
 "use client";
 
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { useState, useEffect } from "react";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
+import { useState } from "react";
 import "./../app/app.css";
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
 
-Amplify.configure(outputs);
-
-const client = generateClient<Schema>();
-
 export default function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-    
-    
   const { signOut } = useAuthenticator();
+  const [studyBuddies, setStudyBuddies] = useState<{ id: number; name: string; subject: string }[]>([]);
+  const [matches, setMatches] = useState<{ name: string; subject: string }[]>([]);
 
-  function listTodos() {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
+  function addStudyBuddy() {
+    const name = window.prompt("Study Buddy name");
+    const subject = window.prompt("Subject");
+    if (name && subject) {
+      setStudyBuddies([...studyBuddies, { id: studyBuddies.length + 1, name, subject }]);
+    }
   }
 
-  useEffect(() => {
-    listTodos();
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({
-      content: window.prompt("Todo content"),
-    });
+  function findMatches() {
+    const subject = window.prompt("Enter subject to find a match");
+    if (subject) {
+      const matchedBuddies = studyBuddies.filter(buddy => buddy.subject.toLowerCase() === subject.toLowerCase());
+      setMatches(matchedBuddies);
+    }
   }
-
-    
 
   return (
     <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ news</button>
-      <ul>
-        {todos.map((todo) => (
-          <li 
-          key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
+      <h1>Study Buddy Finder</h1>
       <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/nextjs/start/quickstart/nextjs-app-router-client-components/">
-          Review next steps of this tutorial.
-        </a>
+        <h2>Find a Study Buddy</h2>
+        <button onClick={addStudyBuddy}>+ Add Study Buddy</button>
+        <ul>
+          {studyBuddies.map((buddy) => (
+            <li key={buddy.id}>
+              {buddy.name} - {buddy.subject}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Matchmaking</h2>
+        <button onClick={findMatches}>Find Matches</button>
+        <ul>
+          {matches.map((match, index) => (
+            <li key={index}>
+              {match.name} - {match.subject}
+            </li>
+          ))}
+        </ul>
       </div>
       <button onClick={signOut}>Sign out</button>
     </main>
